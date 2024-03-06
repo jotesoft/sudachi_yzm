@@ -491,7 +491,7 @@ jboolean Java_org_yuzu_yuzu_1emu_NativeLibrary_doesUpdateMatchProgram(JNIEnv* en
     return false;
 }
 
-void JNICALL Java_org_yuzu_yuzu_1emu_NativeLibrary_initializeGpuDriver(JNIEnv* env, jclass clazz,
+void JNICALL Java_org_yuzu_yuzu_1emu_NativeLibrary_initializeGpuDriver(JNIEnv* env, jobject clazz,
                                                                        jstring hook_lib_dir,
                                                                        jstring custom_driver_dir,
                                                                        jstring custom_driver_name,
@@ -555,32 +555,32 @@ jobjectArray Java_org_yuzu_yuzu_1emu_utils_GpuDriverHelper_getSystemDriverInfo(
     return j_driver_info;
 }
 
-jboolean Java_org_yuzu_yuzu_1emu_NativeLibrary_reloadKeys(JNIEnv* env, jclass clazz) {
+jboolean Java_org_yuzu_yuzu_1emu_NativeLibrary_reloadKeys(JNIEnv* env, jobject clazz) {
     Core::Crypto::KeyManager::Instance().ReloadKeys();
     return static_cast<jboolean>(Core::Crypto::KeyManager::Instance().AreKeysLoaded());
 }
 
-void Java_org_yuzu_yuzu_1emu_NativeLibrary_unpauseEmulation(JNIEnv* env, jclass clazz) {
+void Java_org_yuzu_yuzu_1emu_NativeLibrary_unpauseEmulation(JNIEnv* env, jobject clazz) {
     EmulationSession::GetInstance().UnPauseEmulation();
 }
 
-void Java_org_yuzu_yuzu_1emu_NativeLibrary_pauseEmulation(JNIEnv* env, jclass clazz) {
+void Java_org_yuzu_yuzu_1emu_NativeLibrary_pauseEmulation(JNIEnv* env, jobject clazz) {
     EmulationSession::GetInstance().PauseEmulation();
 }
 
-void Java_org_yuzu_yuzu_1emu_NativeLibrary_stopEmulation(JNIEnv* env, jclass clazz) {
+void Java_org_yuzu_yuzu_1emu_NativeLibrary_stopEmulation(JNIEnv* env, jobject clazz) {
     EmulationSession::GetInstance().HaltEmulation();
 }
 
-jboolean Java_org_yuzu_yuzu_1emu_NativeLibrary_isRunning(JNIEnv* env, jclass clazz) {
+jboolean Java_org_yuzu_yuzu_1emu_NativeLibrary_isRunning(JNIEnv* env, jobject clazz) {
     return static_cast<jboolean>(EmulationSession::GetInstance().IsRunning());
 }
 
-jboolean Java_org_yuzu_yuzu_1emu_NativeLibrary_isPaused(JNIEnv* env, jclass clazz) {
+jboolean Java_org_yuzu_yuzu_1emu_NativeLibrary_isPaused(JNIEnv* env, jobject clazz) {
     return static_cast<jboolean>(EmulationSession::GetInstance().IsPaused());
 }
 
-void Java_org_yuzu_yuzu_1emu_NativeLibrary_initializeSystem(JNIEnv* env, jclass clazz,
+void Java_org_yuzu_yuzu_1emu_NativeLibrary_initializeSystem(JNIEnv* env, jobject clazz,
                                                             jboolean reload) {
     // Initialize the emulated system.
     if (!reload) {
@@ -589,7 +589,7 @@ void Java_org_yuzu_yuzu_1emu_NativeLibrary_initializeSystem(JNIEnv* env, jclass 
     EmulationSession::GetInstance().InitializeSystem(reload);
 }
 
-jdoubleArray Java_org_yuzu_yuzu_1emu_NativeLibrary_getPerfStats(JNIEnv* env, jclass clazz) {
+jdoubleArray Java_org_yuzu_yuzu_1emu_NativeLibrary_getPerfStats(JNIEnv* env, jobject clazz) {
     jdoubleArray j_stats = env->NewDoubleArray(4);
 
     if (EmulationSession::GetInstance().IsRunning()) {
@@ -605,7 +605,7 @@ jdoubleArray Java_org_yuzu_yuzu_1emu_NativeLibrary_getPerfStats(JNIEnv* env, jcl
     return j_stats;
 }
 
-jstring Java_org_yuzu_yuzu_1emu_NativeLibrary_getCpuBackend(JNIEnv* env, jclass clazz) {
+jstring Java_org_yuzu_yuzu_1emu_NativeLibrary_getCpuBackend(JNIEnv* env, jobject clazz) {
     if (Settings::IsNceEnabled()) {
         return Common::Android::ToJString(env, "NCE");
     }
@@ -641,18 +641,18 @@ void Java_org_yuzu_yuzu_1emu_NativeLibrary_run(JNIEnv* env, jobject jobj, jstrin
     }
 }
 
-void Java_org_yuzu_yuzu_1emu_NativeLibrary_logDeviceInfo(JNIEnv* env, jclass clazz) {
+void Java_org_yuzu_yuzu_1emu_NativeLibrary_logDeviceInfo(JNIEnv* env, jobject clazz) {
     LOG_INFO(Frontend, "yuzu Version: {}-{}", Common::g_scm_branch, Common::g_scm_desc);
     LOG_INFO(Frontend, "Host OS: Android API level {}", android_get_device_api_level());
 }
 
-void Java_org_yuzu_yuzu_1emu_NativeLibrary_submitInlineKeyboardText(JNIEnv* env, jclass clazz,
+void Java_org_yuzu_yuzu_1emu_NativeLibrary_submitInlineKeyboardText(JNIEnv* env, jobject clazz,
                                                                     jstring j_text) {
     const std::u16string input = Common::UTF8ToUTF16(Common::Android::GetJString(env, j_text));
     EmulationSession::GetInstance().SoftwareKeyboard()->SubmitInlineKeyboardText(input);
 }
 
-void Java_org_yuzu_yuzu_1emu_NativeLibrary_submitInlineKeyboardInput(JNIEnv* env, jclass clazz,
+void Java_org_yuzu_yuzu_1emu_NativeLibrary_submitInlineKeyboardInput(JNIEnv* env, jobject clazz,
                                                                      jint j_key_code) {
     EmulationSession::GetInstance().SoftwareKeyboard()->SubmitInlineKeyboardInput(j_key_code);
 }
@@ -677,7 +677,7 @@ void Java_org_yuzu_yuzu_1emu_NativeLibrary_initializeEmptyUserDirectory(JNIEnv* 
     }
 }
 
-jstring Java_org_yuzu_yuzu_1emu_NativeLibrary_getAppletLaunchPath(JNIEnv* env, jclass clazz,
+jstring Java_org_yuzu_yuzu_1emu_NativeLibrary_getAppletLaunchPath(JNIEnv* env, jobject clazz,
                                                                   jlong jid) {
     auto bis_system =
         EmulationSession::GetInstance().System().GetFileSystemController().GetSystemNANDContents();
@@ -694,18 +694,18 @@ jstring Java_org_yuzu_yuzu_1emu_NativeLibrary_getAppletLaunchPath(JNIEnv* env, j
     return Common::Android::ToJString(env, applet_nca->GetFullPath());
 }
 
-void Java_org_yuzu_yuzu_1emu_NativeLibrary_setCurrentAppletId(JNIEnv* env, jclass clazz,
+void Java_org_yuzu_yuzu_1emu_NativeLibrary_setCurrentAppletId(JNIEnv* env, jobject clazz,
                                                               jint jappletId) {
     EmulationSession::GetInstance().SetAppletId(jappletId);
 }
 
-void Java_org_yuzu_yuzu_1emu_NativeLibrary_setCabinetMode(JNIEnv* env, jclass clazz,
+void Java_org_yuzu_yuzu_1emu_NativeLibrary_setCabinetMode(JNIEnv* env, jobject clazz,
                                                           jint jcabinetMode) {
     EmulationSession::GetInstance().System().GetFrontendAppletHolder().SetCabinetMode(
         static_cast<Service::NFP::CabinetMode>(jcabinetMode));
 }
 
-jboolean Java_org_yuzu_yuzu_1emu_NativeLibrary_isFirmwareAvailable(JNIEnv* env, jclass clazz) {
+jboolean Java_org_yuzu_yuzu_1emu_NativeLibrary_isFirmwareAvailable(JNIEnv* env, jobject clazz) {
     auto bis_system =
         EmulationSession::GetInstance().System().GetFileSystemController().GetSystemNANDContents();
     if (!bis_system) {
