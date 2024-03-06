@@ -8,14 +8,14 @@ import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
 import android.view.View
-import android.view.WindowInsets
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.Keep
 import androidx.core.view.ViewCompat
-import java.io.Serializable
+import androidx.core.view.WindowInsetsCompat
 import org.yuzu.yuzu_emu.NativeLibrary
 import org.yuzu.yuzu_emu.R
 import org.yuzu.yuzu_emu.applets.keyboard.ui.KeyboardDialogFragment
+import java.io.Serializable
 
 @Keep
 object SoftwareKeyboard {
@@ -35,7 +35,7 @@ object SoftwareKeyboard {
         val overlayView = emulationActivity!!.findViewById<View>(R.id.surface_input_overlay)
         val im =
             overlayView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        im.showSoftInput(overlayView, InputMethodManager.SHOW_FORCED)
+        im.showSoftInput(overlayView, 0)
 
         // There isn't a good way to know that the IMM is dismissed, so poll every 500ms to submit inline keyboard result.
         val handler = Handler(Looper.myLooper()!!)
@@ -44,7 +44,7 @@ object SoftwareKeyboard {
             object : Runnable {
                 override fun run() {
                     val insets = ViewCompat.getRootWindowInsets(overlayView)
-                    val isKeyboardVisible = insets!!.isVisible(WindowInsets.Type.ime())
+                    val isKeyboardVisible = insets!!.isVisible(WindowInsetsCompat.Type.ime())
                     if (isKeyboardVisible) {
                         handler.postDelayed(this, delayMs.toLong())
                         return
